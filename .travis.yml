@@ -29,6 +29,7 @@ install:
   - aws configure list
 
 script:
+  - molecule lint
   - molecule create --scenario-name ec2
   - molecule converge --scenario-name ec2
   - molecule verify --scenario-name ec2
