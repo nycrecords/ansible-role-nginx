@@ -29,6 +29,7 @@ install:
   - aws configure list
 
 script:
-  - molecule --debug test -s ec2
-
-notifications:
+  - molecule create --scenario-name ec2
+  - molecule converge --scenario-name ec2
+  - molecule verify --scenario-name ec2
+  - molecule destroy --scenario-name ec2
