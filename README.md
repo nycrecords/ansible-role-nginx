@@ -1,4 +1,4 @@
-nginx role
+Ansible Role: Nginx
 =========
 [![License](https://img.shields.io/badge/license-Apache-green.svg?style=flat)](https://raw.githubusercontent.com/nycrecords/ansible-role-nginx/master/LICENSE)
 [![Build Status](https://travis-ci.org/nycrecords/ansible-role-nginx.svg?branch=master)](https://travis-ci.org/nycrecords/ansible-role-nginx)
