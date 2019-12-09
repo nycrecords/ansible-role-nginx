@@ -1,12 +1,43 @@
 ---
-galaxy_info:
-  role_name: nginx
-  author: NYC Records App Dev Team <appdev@records.nyc.gov>
-  description: Installs Nginx on RedHat
-  company: NYC Department of Records and Information Services
-  issue_tracker_url: https://github.com/nycrecords/ansible-role-nginx/issues
-  license: Apache
-  min_ansible_version: 2.7
-  platforms: [{name: [EL], versions: [7]}]
-  galaxy_tags: [nginx, webserver, loadbalancer]
 dependencies: []
+
+galaxy_info:
+  author: geerlingguy
+  description: Nginx installation for Linux, FreeBSD and OpenBSD.
+  company: "Midwestern Mac, LLC"
+  license: "license (BSD, MIT)"
+  min_ansible_version: 2.4
+  platforms:
+    - name: EL
+      versions:
+        - 6
+        - 7
+    - name: Debian
+      versions:
+        - all
+    - name: Ubuntu
+      versions:
+        - trusty
+        - xenial
+    - name: Archlinux
+      versions:
+        - all
+    - name: FreeBSD
+      versions:
+        - 10.3
+        - 10.2
+        - 10.1
+        - 10.0
+        - 9.3
+    - name: OpenBSD
+      versions:
+        - 5.9
+        - 6.0
+  galaxy_tags:
+    - development
+    - web
+    - nginx
+    - reverse
+    - proxy
+    - load
+    - balancer

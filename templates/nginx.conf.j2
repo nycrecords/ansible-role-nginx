@@ -1,131 +1,81 @@
-# For more information on configuration, see:
-#   * Official English Documentation: http://nginx.org/en/docs/
-#   * Official Russian Documentation: http://nginx.org/ru/docs/
+user  {{ nginx_user }};
 
-user  nginx;
-worker_processes  1;
+error_log  {{ nginx_error_log }};
+pid        {{ nginx_pidfile }};
 
-error_log  /var/opt/rh/rh-nginx18/log/nginx/error.log;
-#error_log  /var/opt/rh/rh-nginx18/log/nginx/error.log  notice;
-#error_log  /var/opt/rh/rh-nginx18/log/nginx/error.log  info;
+{% block worker %}
+worker_processes  {{ nginx_worker_processes }};
+{% endblock %}
 
-pid        /var/opt/rh/rh-nginx18/run/nginx/nginx.pid;
+{% if nginx_extra_conf_options %}
+{{ nginx_extra_conf_options }}
+{% endif %}
 
-
+{% block events %}
 events {
-    worker_connections  1024;
+    worker_connections  {{ nginx_worker_connections }};
+    multi_accept {{ nginx_multi_accept }};
 }
-
+{% endblock %}
 
 http {
-    include       /etc/opt/rh/rh-nginx18/nginx/mime.types;
+    {% block http_begin %}{% endblock %}
+
+{% block http_basic %}
+    include       {{ nginx_mime_file_path }};
     default_type  application/octet-stream;
 
-    log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
-                      '$status $body_bytes_sent "$http_referer" '
-                      '"$http_user_agent" "$http_x_forwarded_for"';
+    server_names_hash_bucket_size {{ nginx_server_names_hash_bucket_size }};
 
-    access_log  /var/opt/rh/rh-nginx18/log/nginx/access.log  main;
+    client_max_body_size {{ nginx_client_max_body_size }};
 
-    sendfile        on;
-    #tcp_nopush     on;
+    log_format  main  {{ nginx_log_format|indent(23) }};
 
-    #keepalive_timeout  0;
-    keepalive_timeout  65;
+    access_log  {{ nginx_access_log }};
 
-    #gzip  on;
+    sendfile        {{ nginx_sendfile }};
+    tcp_nopush      {{ nginx_tcp_nopush }};
+    tcp_nodelay     {{ nginx_tcp_nodelay }};
 
-    # Load modular configuration files from the /etc/nginx/conf.d directory.
-    # See http://nginx.org/en/docs/ngx_core_module.html#include
-    # for more information.
-    include /etc/opt/rh/rh-nginx18/nginx/conf.d/*.conf;
+    keepalive_timeout  {{ nginx_keepalive_timeout }};
+    keepalive_requests {{ nginx_keepalive_requests }};
 
-    server {
-        listen       80;
-        server_name  localhost;
+    server_tokens {{ nginx_server_tokens }};
+{% if nginx_proxy_cache_path %}
+    proxy_cache_path {{ nginx_proxy_cache_path }};
+{% endif %}
+{% endblock %}
 
-        #charset koi8-r;
+{% block http_gzip %}
+    # gzip on;
+{% endblock %}
 
-        #access_log  /var/opt/rh/rh-nginx18/log/nginx/host.access.log  main;
+{% if nginx_extra_http_options %}
+    {{ nginx_extra_http_options|indent(4, False) }}
+{% endif %}
 
-        location / {
-            root   /opt/rh/rh-nginx18/root/usr/share/nginx/html;
-            index  index.html index.htm;
-        }
-
-        # redirect server error pages to the static page /40x.html
-        #
-        error_page  404              /404.html;
-        location = /40x.html {
-            root   /opt/rh/rh-nginx18/root/usr/share/nginx/html;
-        }
-
-        # redirect server error pages to the static page /50x.html
-        #
-        error_page   500 502 503 504  /50x.html;
-        location = /50x.html {
-            root   /opt/rh/rh-nginx18/root/usr/share/nginx/html;
-        }
-
-        # proxy the PHP scripts to Apache listening on 127.0.0.1:80
-        #
-        #location ~ \.php$ {
-        #    proxy_pass   http://127.0.0.1;
-        #}
-
-        # pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000
-        #
-        #location ~ \.php$ {
-        #    root           html;
-        #    fastcgi_pass   127.0.0.1:9000;
-        #    fastcgi_index  index.php;
-        #    fastcgi_param  SCRIPT_FILENAME  /scripts$fastcgi_script_name;
-        #    include        fastcgi_params;
-        #}
-
-        # deny access to .htaccess files, if Apache's document root
-        # concurs with nginx's one
-        #
-        #location ~ /\.ht {
-        #    deny  all;
-        #}
+{% block http_upstream %}
+{% for upstream in nginx_upstreams %}
+    upstream {{ upstream.name }} {
+{% if upstream.strategy is defined %}
+        {{ upstream.strategy }};
+{% endif %}
+{% for server in upstream.servers %}
+        server {{ server }};
+{% endfor %}
+{% if upstream.keepalive is defined %}
+        keepalive {{ upstream.keepalive }};
+{% endif %}
     }
+{% endfor %}
+{% endblock %}
 
+{% block http_includes %}
+    include {{ nginx_conf_path }}/*.conf;
+{% if nginx_conf_path != nginx_vhost_path %}
+    include {{ nginx_vhost_path }}/*;
+{% endif %}
+{% endblock %}
 
-    # another virtual host using mix of IP-, name-, and port-based configuration
-    #
-    #server {
-    #    listen       8000;
-    #    listen       somename:8080;
-    #    server_name  somename  alias  another.alias;
-
-    #    location / {
-    #        root   html;
-    #        index  index.html index.htm;
-    #    }
-    #}
-
-
-    # HTTPS server
-    #
-    #server {
-    #    listen       443;
-    #    server_name  localhost;
-
-    #    ssl                  on;
-    #    ssl_certificate      cert.pem;
-    #    ssl_certificate_key  cert.key;
-
-    #    ssl_session_timeout  5m;
-
-    #    ssl_protocols  SSLv2 SSLv3 TLSv1;
-    #    ssl_ciphers  HIGH:!aNULL:!MD5;
-    #    ssl_prefer_server_ciphers   on;
-
-    #    location / {
-    #        root   html;
-    #        index  index.html index.htm;
-    #    }
-    #}
-
+    {% block http_end %}{% endblock %}
 }

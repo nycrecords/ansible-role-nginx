@@ -3,3 +3,5 @@ __pycache__
 *.rst
 *.log
 .env
+*.retry
+*/__pycache__
