@@ -3,16 +3,13 @@ dependency:
   name: galaxy
 driver:
   name: ec2
-  options:
-    ansible_connection_options:
-      ansible_user: ec2-user
 lint:
   name: yamllint
 platforms:
   - name: instance
-    image: ami-01a834fd83ae239ff
+    image: ami-000db10762d0c4c05
     instance_type: t2.micro
-    vpc_subnet_id: subnet-b02a32fa
+    vpc_subnet_id: subnet-38a38302
 provisioner:
   name: ansible
   lint:
@@ -21,6 +18,17 @@ provisioner:
     ansible_user: ec2-user
   playbooks:
     converge: ../resources/playbooks/converge.yml
+    cleanup: ../resources/playbooks/cleanup.yml
+  inventory:
+    host_vars:
+      instance:
+        ec2_driver: true
+        rhsm_repositories:
+          enabled:
+            - rhel-7-server-rpms
+            - rhel-7-server-optional-rpms
+            - rhel-7-server-extras-rpms
+            - rhel-server-rhscl-7-rpms
 verifier:
   name: testinfra
   options:
