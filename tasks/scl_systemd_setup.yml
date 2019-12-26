@@ -1,0 +1,21 @@
+---
+# Workaround for https://bugs.launchpad.net/ubuntu/+source/nginx/+bug/1581864 - Appears on RHEL as well
+- name: Create override directory
+  file:
+    path: "{{ nginx_service_directory }}"
+    state: directory
+    owner: root
+    group: "{{ root_group }}"
+    mode: '0755'
+
+- name: Copy override config in place
+  template:
+    src: "{{ nginx_override_template }}"
+    dest: "{{ nginx_override_file_path }}"
+    owner: root
+    group: "{{ root_group }}"
+    mode: 0644
+
+- name: Force systemd to reread configs (2.4 and above)
+  systemd:
+    daemon_reload: yes

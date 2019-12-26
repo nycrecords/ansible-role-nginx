@@ -1,2 +1,4 @@
 ---
-[]
+- src: nycrecords.yum_config_manager
+- src: nycrecords.rhsm
+- src: nycrecords.scl

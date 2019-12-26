@@ -3,15 +3,40 @@
   hosts: all
   become: true
 
-  roles:
-    - role: nycrecords.yum_config_manager
-    - role: ansible-role-nginx
-
   vars:
-    nginx_yum_repo_enabled: false
-    nginx_package_name: rh-nginx18
-    nginx_server_name: rh-nginx18-nginx
+    # Role: rhsm
+    rhsm_username: "{{ lookup('env', 'RHSM_USERNAME') }}"
+    rhsm_password: "{{ lookup('env', 'RHSM_PASSWORD') }}"
+    rhsm_auto_attach: true
+    rhsm_server_proxy_hostname: "{{ lookup('env', 'http_proxy_hostname') }}"
+    rhsm_server_proxy_port: "{{ lookup('env', 'http_proxy_port') }}"
+    rhsm_server_proxy_user: "{{ lookup('env', 'http_proxy_user') }}"
+    rhsm_server_proxy_password: "{{ lookup('env', 'http_proxy_password') }}"
+    rhsm_consumer_name: "nycrecords_{{ '%Y%m%d_%H%M%s' | strftime(ansible_date_time.epoch) }}"
+
+    # Role: yum_config_manager
     repositories:
       enabled:
         - rhui-REGION-rhel-server-rhscl
         - rhui-REGION-rhel-server-debug-rhscl
+
+    # Role: nginx
+    nginx_yum_repo_enabled: false
+    nginx_use_scl: true
+    nginx_package_name: rh-nginx18
+    nginx_service_name: rh-nginx18-nginx
+    nginx_conf_path: /etc/opt/rh/rh-nginx18/nginx/conf.d
+    nginx_conf_file_path: /etc/opt/rh/rh-nginx18/nginx/nginx.conf
+    nginx_mime_file_path: /etc/opt/rh/rh-nginx18/nginx/mime.types
+    nginx_pid_file: /var/opt/rh/rh-nginx18/run/nginx/nginx.pid
+    nginx_access_log: "/var/opt/rh/rh-nginx18/log/nginx/access.log main buffer=16k flush=2m"
+    nginx_error_log: "/var/opt/rh/rh-nginx18/log/nginx/error.log warn"
+    nginx_vhost_path: /etc/opt/rh/rh-nginx18/nginx/conf.d
+    nginx_default_vhost_path: /etc/opt/rh/rh-nginx18/nginx/conf.d/default.conf
+
+  roles:
+    - role: nycrecords.yum_config_manager
+      when: "molecule_yml.driver.name == 'ec2'"
+    - role: nycrecords.rhsm
+      when: "molecule_yml.driver.name == 'vagrant'"
+    - role: ansible-role-nginx
