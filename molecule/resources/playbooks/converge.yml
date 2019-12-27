@@ -34,6 +34,13 @@
     nginx_vhost_path: /etc/opt/rh/rh-nginx18/nginx/conf.d
     nginx_default_vhost_path: /etc/opt/rh/rh-nginx18/nginx/conf.d/default.conf
 
+    nginx_vhosts:
+      - listen: "80"
+        server_name: "0.0.0.0"
+        root: "/opt/rh/rh-nginx18/root/usr/share/nginx/html"
+        index: "index.html index.htm"
+
+
   roles:
     - role: nycrecords.yum_config_manager
       when: "molecule_yml.driver.name == 'ec2'"
