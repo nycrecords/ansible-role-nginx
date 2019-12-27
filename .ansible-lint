@@ -3,5 +3,7 @@ exclude_paths:
  - ./molecule/
 rulesdir:
   - ~/ansible-lint-rules/rules/
+skip_list:
+  - '403'
 use_default_rules: true
 verbosity: 1

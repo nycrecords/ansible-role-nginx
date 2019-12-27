@@ -1,40 +1,37 @@
 import os
 
 import testinfra.utils.ansible_runner
-import pytest
 
 testinfra_hosts = testinfra.utils.ansible_runner.AnsibleRunner(
     os.environ["MOLECULE_INVENTORY_FILE"]
 ).get_hosts("all")
 
 
-@pytest.fixture(scope="module")
-def enabled_repos(host):
-    with host.sudo():
-        stdout = host.check_output("subscription-manager repos --list-enabled")
+def test_nginx_installed(host):
+    nginx = host.package("rh-nginx18")
 
-    enabled_repos = []
-    for line in stdout.splitlines():
-        if line.lower().startswith("repo id:"):
-            enabled_repos.append(line.split()[-1])
-    return enabled_repos
+    assert nginx.is_installed
 
 
-@pytest.fixture(scope="session")
-def expected_repos():
-    return (
-        "rhel-7-server-rpms",
-        "rhel-7-server-extras-rpms",
-        "rhel-7-server-optional-rpms",
-        "rhel-server-rhscl-7-rpms",
-    )
+def test_nginx_config_exists(host):
+    nginx_config = host.file("/etc/opt/rh/rh-nginx18/nginx/nginx.conf")
+
+    assert nginx_config.exists
+    assert nginx_config.is_file
+    assert nginx_config.user == "root"
+    assert nginx_config.group == "root"
 
 
-def test_rhsm_subscription_current(host):
-    cmd = host.run("sudo subscription-manager status")
+def test_nginx_vhost_example_exists(host):
+    nginx_vhost = host.file("/etc/opt/rh/rh-nginx18/nginx/nginx.conf")
 
-    assert "Overall Status: Current" in cmd.stdout
+    assert nginx_vhost.exists
+    assert nginx_vhost.is_file
+    assert nginx_vhost.user == "root"
+    assert nginx_vhost.group == "root"
 
 
-def test_repos_enabled(expected_repos, enabled_repos):
-    assert set(expected_repos) == set(enabled_repos)
+def test_nginx_listening_http(host):
+    socket = host.socket("tcp://0.0.0.0:80")
+
+    assert socket.is_listening
