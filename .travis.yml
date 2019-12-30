@@ -13,12 +13,21 @@ env:
     - secure: EXtwo4WizaL/xg3gdH3Xr4RxuMZpMeKSIHZyfr5IAwrU8TRpvRduUj+nCnPL+VSbGNqeuD0S3WJtMmw8GuauWZXRD+7mkwDBJWz8wXAmtnyEIwEGD0t8FIHCxJBmxy29UYwn5+f3xaIvwutVFjV1OFLMG0iiBBa/wVuAzgCSrFSND3M0+bBYk7xy0MBKTyc88UOCYnKxixFkH2v3Qd4xKUn7BSrTJFgolQxrsqvcIwRmWE6f7LIvbUPgISSC9KMSN/GcLwqXnZOc9ssu0dDnJg7sjin1qTQeqfB2WyvBqxJfle7kxqeWa1j5cd7EikKiyRg7FjZWszGzNtT/Dc9WceuvFRpvDZ9+kPAErBGwaT4BYuIdz4bB6Mp+P7G2sAMaXYMweqhDI7qfGo1GXP/Dqm5pYCQg4vCVy5Wycir1tcBSFlOqFiyeZMBl5FOst46JoJujXxqRYvZD9mgrD2wgqWOXxhwe78RP1tzf7Ayh2FvvcATWNrTqTvB9eEzxUqWZZTkSLIdKIj63KfHaTS+aCvbR23yeQsYj43XfvVdkjz/j7LvIIoBpGK8tw8WKjk1kfoeBEg5i60STxNLxQIxhQdOARVbIoRpiDYuGZAV4ph6I79vGLKTvpPYQERfi4PNw4q0RdmV6EZUJ+ZKMBxGw1x2fd9eMUkPuwpKyfQerA4s=
 
 install:
+  # Python Configuration
   - pip install pipenv
   - pipenv install
+
+  # AWS Configuration
   - aws configure set aws_access_key_id $AWS_ACCESS_KEY
   - aws configure set aws_secret_access_key $AWS_SECRET_KEY
   - aws configure set default.region $EC2_REGION
   - aws configure list
+  
+  # Add ansible.cfg to pick up roles path.
+  - "printf '[defaults]\nroles_path = ../' > ansible.cfg"
+  
+  # Install Ansible Galaxy Roles
+  - pipenv run ansible-galaxy install -r requirements.yml
 script:
   - molecule create --scenario-name aws
   - molecule converge --scenario-name aws
