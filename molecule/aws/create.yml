@@ -34,6 +34,8 @@
         description: "{{ security_group_name }}"
         rules: "{{ security_group_rules }}"
         rules_egress: "{{ security_group_rules_egress }}"
+        state: present
+      register: security_group_id
 
     - name: Test for presence of local keypair
       stat:
@@ -64,7 +66,7 @@
         image: "{{ item.image }}"
         instance_type: "{{ item.instance_type }}"
         vpc_subnet_id: "{{ item.vpc_subnet_id }}"
-        group: "{{ security_group_name }}"
+        group_id: "{{ security_group_id.group_id }}"
         instance_tags:
           instance: "{{ item.name }}"
         wait: true
@@ -87,11 +89,14 @@
 
     # Mandatory configuration for Molecule to function.
 
+    - debug:
+        msg: "{{ ec2_jobs }}"
+
     - name: Populate instance config dict
       set_fact:
         instance_conf_dict: {
-          'instance': "{{ item.instances[0].tags.instance }}",
-          'address': "{{ item.instances[0].public_ip }}",
+          'instance': "{{ item.tagged_instances[0].tags.instance }}",
+          'address': "{{ item.tagged_instances[0].public_ip }}",
           'user': "{{ ssh_user }}",
           'port': "{{ ssh_port }}",
           'identity_file': "{{ keypair_path }}",
