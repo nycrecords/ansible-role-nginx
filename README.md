@@ -1,11 +1,10 @@
-[![License](https://img.shields.io/badge/license-Apache-green.svg?style=flat)](https://raw.githubusercontent.com/nycrecords/ansible-role-nginx/master/LICENSE)
+![GitHub](https://img.shields.io/github/license/nycrecords/ansible-role-nginx)
 [![Build Status](https://travis-ci.org/geerlingguy/ansible-role-nginx.svg?branch=master)](https://travis-ci.org/geerlingguy/ansible-role-nginx)
 [![Galaxy](https://img.shields.io/badge/galaxy-nycrecords.nginx-blue.svg)](https://galaxy.ansible.com/nycrecords/nginx)
 ![Ansible](https://img.shields.io/ansible/role/d/45553)
 ![Ansible](https://img.shields.io/ansible/quality/45553)
 
 # Ansible Role: Nginx
-
 
 **Note:** Please consider using the official [NGINX Ansible role](https://github.com/nginxinc/ansible-role-nginx) from NGINX, Inc.
 
@@ -243,4 +242,6 @@ MIT / BSD
 
 ## Author Information
 
-This role was created in 2014 by [Jeff Geerling](https://www.jeffgeerling.com/), author of [Ansible for DevOps](https://www.ansiblefordevops.com/).
+This role was originally created in 2014 by [Jeff Geerling](https://www.jeffgeerling.com/), author of [Ansible for DevOps](https://www.ansiblefordevops.com/).
+
+Modified by [Joel Castillo](https://github.com/joelbcastillo) for the [NYC Department of Records and Information Services](https://github.com/nycrecords).

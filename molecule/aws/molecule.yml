@@ -2,7 +2,8 @@
 dependency:
   name: galaxy
   options:
-    role-file: ../../requirements.yml
+    role-file: molecule/resources/requirements.yml
+    roles-path: molecule/resources/roles/
 driver:
   name: ec2
 lint:
@@ -31,7 +32,7 @@ provisioner:
             - rhel-7-server-extras-rpms
             - rhel-server-rhscl-7-rpms
   env:
-    ANSIBLE_ROLES_PATH: $HOME/.ansible/roles
+    ANSIBLE_ROLES_PATH: ../resources/roles/
 verifier:
   name: testinfra
   options:

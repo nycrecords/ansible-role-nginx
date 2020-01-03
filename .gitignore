@@ -6,3 +6,5 @@ __pycache__
 *.retry
 */__pycache__
 .vscode/
+molecule/resources/roles/*
+!molecule/resources/roles/.gitkeep
