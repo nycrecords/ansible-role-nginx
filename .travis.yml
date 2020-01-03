@@ -22,12 +22,6 @@ install:
   - aws configure set aws_secret_access_key $AWS_SECRET_KEY
   - aws configure set default.region $EC2_REGION
   - aws configure list
-  
-  # Add ansible.cfg to pick up roles path.
-  - "printf '[defaults]\nroles_path = ../' > ansible.cfg"
-  
-  # Install Ansible Galaxy Roles
-  - pipenv run ansible-galaxy install -r requirements.yml
 script:
   - molecule create --scenario-name aws
   - molecule converge --scenario-name aws

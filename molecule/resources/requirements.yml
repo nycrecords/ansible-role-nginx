@@ -3,5 +3,3 @@
   version: v1.0.0
 - src: nycrecords.rhsm
   version: v1.0.0
-- src: nycrecords.scl
-  version: v1.0.0
