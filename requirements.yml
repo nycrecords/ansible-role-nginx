@@ -2,4 +2,4 @@
 - src: nycrecords.yum_config_manager
   version: 1.0.0
 - src: nycrecords.rhsm
-  version: 1.0.0
+  version: 2.1.0
