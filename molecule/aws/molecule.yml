@@ -8,6 +8,9 @@ driver:
   name: ec2
 lint:
   name: yamllint
+  options:
+    config-data:
+      ignore: molecule/resources/roles/
 platforms:
   - name: instance
     image: ami-000db10762d0c4c05
