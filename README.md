@@ -14,7 +14,9 @@ This role installs and configures the latest version of Nginx from the Nginx yum
 
 ## Requirements
 
-None.
+Ansible 2.4 or higher
+
+On RedHat-based distributions, requires the EPEL repository (you can simply add the role `geerlingguy.repo-epel` to install ensure EPEL is available) or a valid RedHat Subscription.
 
 ## Role Variables
 
