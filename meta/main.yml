@@ -1,12 +1,10 @@
 ---
-dependencies: 
-  - nycrecords.rhsm
-  - nycrecords.yum_config_manager
+dependencies: []
 
 galaxy_info:
   role_name: nginx
   author: joelbcastillo
-  description: Nginx installation for Linux, FreeBSD and OpenBSD. 
+  description: Nginx installation for Linux, FreeBSD and OpenBSD.
   company: "City of New York, Department of Records and Information Services"
   license: "license (BSD, MIT)"
   min_ansible_version: 2.4
