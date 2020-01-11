@@ -1,10 +1,11 @@
+Ansible Role: Nginx
+===================
+
 ![GitHub](https://img.shields.io/github/license/nycrecords/ansible-role-nginx)
 [![Build Status](https://travis-ci.com/nycrecords/ansible-role-nginx.svg?branch=master)](https://travis-ci.com/nycrecords/ansible-role-nginx)
 [![Galaxy](https://img.shields.io/badge/galaxy-nycrecords.nginx-blue.svg)](https://galaxy.ansible.com/nycrecords/nginx)
 ![Ansible](https://img.shields.io/ansible/role/d/45553)
 ![Ansible](https://img.shields.io/ansible/quality/45553)
-
-# Ansible Role: Nginx
 
 **Note:** Please consider using the official [NGINX Ansible role](https://github.com/nginxinc/ansible-role-nginx) from NGINX, Inc.
 
