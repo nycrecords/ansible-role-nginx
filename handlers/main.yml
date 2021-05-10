@@ -12,3 +12,4 @@
   service:
     name: "{{ nginx_service_name }}"
     state: reloaded
+    enabled: {{ nginx_service_enabled }}
